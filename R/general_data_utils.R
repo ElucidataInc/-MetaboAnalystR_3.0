@@ -1268,7 +1268,7 @@ PlotCmpdSummary <- function(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA){
     }
     # Deal with curl issues
     if(lib.download){
-      lib.url <- paste("https://www.metaboanalyst.ca/resources/libs/", filenm, sep="");
+      lib.url <- paste("https://s3-ap-southeast-1.amazonaws.com/metaboanalyst-data-files/resources/libs/", filenm, sep="");
       tryCatch(
         {
           download.file(lib.url, destfile=filenm, method="curl")
@@ -1323,7 +1323,7 @@ LoadKEGGLib<-function(libType, libNm){
     if(.on.public.web){
         my.rda  <- paste("../../libs/", libType, "/", destfile, sep="");
      }else{
-        my.rda <- paste("https://www.metaboanalyst.ca/resources/libs/", libType, "/", destfile, sep="");
+        my.rda <- paste("https://s3-ap-southeast-1.amazonaws.com/metaboanalyst-data-files/resources/libs/", libType, "/", destfile, sep="");
     }
 
     print(paste("adding library:", my.rda));
