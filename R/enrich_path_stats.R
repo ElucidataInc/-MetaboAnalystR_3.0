@@ -42,45 +42,45 @@ CalculateOraScore <- function(mSetObj=NA, nodeImp, method){
     return(0);
   }
   
-  if(!.on.public.web & mSetObj$pathwaylibtype == "KEGG"){
-    mSetObj$api$nodeImp <- nodeImp;
-    mSetObj$api$method <- method;
-    mSetObj$api$oraVec <- ora.vec; 
+  # if(!.on.public.web & mSetObj$pathwaylibtype == "KEGG"){
+  #   mSetObj$api$nodeImp <- nodeImp;
+  #   mSetObj$api$method <- method;
+  #   mSetObj$api$oraVec <- ora.vec; 
     
-    if(mSetObj$api$filter){
-      mSetObj$api$filterData <- mSetObj$dataSet$metabo.filter.kegg
+  #   if(mSetObj$api$filter){
+  #     mSetObj$api$filterData <- mSetObj$dataSet$metabo.filter.kegg
       
-      toSend <- list(libVersion = mSetObj$api$libVersion, libNm = mSetObj$api$libNm, filter = mSetObj$api$filter, nodeImp = mSetObj$api$nodeImp,
-                     method = mSetObj$api$method, oraVec = mSetObj$api$oraVec, filterData = mSetObj$api$filterData)
-    }else{
-      toSend <- list(libVersion = mSetObj$api$libVersion, libNm = mSetObj$api$libNm, filter = mSetObj$api$filter, nodeImp = mSetObj$api$nodeImp,
-                     method = mSetObj$api$method, oraVec = mSetObj$api$oraVec)
-    }
+  #     toSend <- list(libVersion = mSetObj$api$libVersion, libNm = mSetObj$api$libNm, filter = mSetObj$api$filter, nodeImp = mSetObj$api$nodeImp,
+  #                    method = mSetObj$api$method, oraVec = mSetObj$api$oraVec, filterData = mSetObj$api$filterData)
+  #   }else{
+  #     toSend <- list(libVersion = mSetObj$api$libVersion, libNm = mSetObj$api$libNm, filter = mSetObj$api$filter, nodeImp = mSetObj$api$nodeImp,
+  #                    method = mSetObj$api$method, oraVec = mSetObj$api$oraVec)
+  #   }
     
-    #json to be sent to server
-    #oraData <- RJSONIO::toJSON(toSend, .na='null') 
-    #write(oraData, file="ora_test.JSON")
-    # code to send to server
-    # change path when on server, use local for now
+  #   #json to be sent to server
+  #   #oraData <- RJSONIO::toJSON(toSend, .na='null') 
+  #   #write(oraData, file="ora_test.JSON")
+  #   # code to send to server
+  #   # change path when on server, use local for now
     
-    load_httr()
-    base <- api.base
-    endpoint <- "/pathwayora"
-    call <- paste(base, endpoint, sep="")
-    query_results <- httr::POST(call, body = toSend, encode= "json")
-    query_results_text <- httr::content(query_results, "text", encoding = "UTF-8")
-    query_results_json <- RJSONIO::fromJSON(query_results_text, flatten = TRUE)
+  #   load_httr()
+  #   base <- api.base
+  #   endpoint <- "/pathwayora"
+  #   call <- paste(base, endpoint, sep="")
+  #   query_results <- httr::POST(call, body = toSend, encode= "json")
+  #   query_results_text <- httr::content(query_results, "text", encoding = "UTF-8")
+  #   query_results_json <- RJSONIO::fromJSON(query_results_text, flatten = TRUE)
     
-    # parse json response from server to results
-    oraDataRes <- do.call(rbind.data.frame, query_results_json$enrichRes)
-    colnames(oraDataRes) <- query_results_json$enrichResColNms
-    rownames(oraDataRes) <- query_results_json$enrichResRowNms
+  #   # parse json response from server to results
+  #   oraDataRes <- do.call(rbind.data.frame, query_results_json$enrichRes)
+  #   colnames(oraDataRes) <- query_results_json$enrichResColNms
+  #   rownames(oraDataRes) <- query_results_json$enrichResRowNms
     
-    write.csv(oraDataRes, file="pathway_results.csv");
-    mSetObj$analSet$ora.mat <- oraDataRes
-    mSetObj$api$guestName <- query_results_json$guestName
-    return(.set.mSet(mSetObj));
-  }
+  #   write.csv(oraDataRes, file="pathway_results.csv");
+  #   mSetObj$analSet$ora.mat <- oraDataRes
+  #   mSetObj$api$guestName <- query_results_json$guestName
+  #   return(.set.mSet(mSetObj));
+  # }
   
   current.mset <- metpa$mset.list;
   uniq.count <- metpa$uniq.count;
