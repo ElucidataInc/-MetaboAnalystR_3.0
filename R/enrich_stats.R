@@ -33,48 +33,48 @@ CalculateHyperScore <- function(mSetObj=NA){
   }
 
   # move to api only if R package + KEGG msets
-  if(!.on.public.web & grepl("kegg", mSetObj$analSet$msetlibname)){
+  # if(!.on.public.web & grepl("kegg", mSetObj$analSet$msetlibname)){
     
-    mSetObj$api$oraVec <- ora.vec; 
+  #   mSetObj$api$oraVec <- ora.vec; 
     
-    if(mSetObj$api$filter){
-      mSetObj$api$filterData <- mSetObj$dataSet$metabo.filter.kegg
-      toSend <- list(libNm = mSetObj$api$libname, filter = mSetObj$api$filter, oraVec = mSetObj$api$oraVec, filterData = mSetObj$api$filterData,
-                     excludeNum = mSetObj$api$excludeNum)
-    }else{
-      toSend <- list(libNm = mSetObj$api$libname, filter = mSetObj$api$filter, oraVec = mSetObj$api$oraVec, excludeNum = mSetObj$api$excludeNum)
-    }
+  #   if(mSetObj$api$filter){
+  #     mSetObj$api$filterData <- mSetObj$dataSet$metabo.filter.kegg
+  #     toSend <- list(libNm = mSetObj$api$libname, filter = mSetObj$api$filter, oraVec = mSetObj$api$oraVec, filterData = mSetObj$api$filterData,
+  #                    excludeNum = mSetObj$api$excludeNum)
+  #   }else{
+  #     toSend <- list(libNm = mSetObj$api$libname, filter = mSetObj$api$filter, oraVec = mSetObj$api$oraVec, excludeNum = mSetObj$api$excludeNum)
+  #   }
     
-    #json to be sent to server
-    #oraData <- RJSONIO::toJSON(toSend, .na='null') 
-    #write(oraData, file="ora_test.JSON")
-    # code to send to server
-    # change path when on server, use local for now
+  #   #json to be sent to server
+  #   #oraData <- RJSONIO::toJSON(toSend, .na='null') 
+  #   #write(oraData, file="ora_test.JSON")
+  #   # code to send to server
+  #   # change path when on server, use local for now
     
-    load_httr()
-    base <- api.base
-    endpoint <- "/enrichmentora"
-    call <- paste(base, endpoint, sep="")
-    query_results <- httr::POST(call, body = toSend, encode= "json")
-    query_results_text <- httr::content(query_results, "text", encoding = "UTF-8")
-    query_results_json <- RJSONIO::fromJSON(query_results_text, flatten = TRUE)
+  #   load_httr()
+  #   base <- api.base
+  #   endpoint <- "/enrichmentora"
+  #   call <- paste(base, endpoint, sep="")
+  #   query_results <- httr::POST(call, body = toSend, encode= "json")
+  #   query_results_text <- httr::content(query_results, "text", encoding = "UTF-8")
+  #   query_results_json <- RJSONIO::fromJSON(query_results_text, flatten = TRUE)
     
-    if(is.null(query_results_json$enrichRes)){
-      AddErrMsg("Error! Enrichment ORA via api.metaboanalyst.ca unsuccessful!")
-      return(0)
-    }
+  #   if(is.null(query_results_json$enrichRes)){
+  #     AddErrMsg("Error! Enrichment ORA via api.metaboanalyst.ca unsuccessful!")
+  #     return(0)
+  #   }
     
-    # parse json response from server to results
-    oraDataRes <- do.call(rbind.data.frame, query_results_json$enrichRes)
-    colnames(oraDataRes) <- query_results_json$enrichResColNms
-    rownames(oraDataRes) <- query_results_json$enrichResRowNms
+  #   # parse json response from server to results
+  #   oraDataRes <- do.call(rbind.data.frame, query_results_json$enrichRes)
+  #   colnames(oraDataRes) <- query_results_json$enrichResColNms
+  #   rownames(oraDataRes) <- query_results_json$enrichResRowNms
     
-    write.csv(oraDataRes, file="msea_ora_result.csv");
-    mSetObj$analSet$ora.mat <- oraDataRes
-    mSetObj$api$guestName <- query_results_json$guestName
-    print("Pathway ORA via api.metaboanalyst.ca successful!")
-    return(.set.mSet(mSetObj));
-  }
+  #   write.csv(oraDataRes, file="msea_ora_result.csv");
+  #   mSetObj$analSet$ora.mat <- oraDataRes
+  #   mSetObj$api$guestName <- query_results_json$guestName
+  #   print("Pathway ORA via api.metaboanalyst.ca successful!")
+  #   return(.set.mSet(mSetObj));
+  # }
   
   current.mset <- current.msetlib$member
   

@@ -40,11 +40,11 @@ SetCurrentMsetLib <- function(mSetObj=NA, libname, excludeNum=0){
     names(current.msetlib) <- c("name", "member", "reference")
   }else{
     
-    if(!.on.public.web & grepl("kegg", libname)){ # api only for KEGG msets
-      mSetObj$api$libname <- libname
-      mSetObj$api$excludeNum = excludeNum
-      return(.set.mSet(mSetObj));
-    }
+    # if(!.on.public.web & grepl("kegg", libname)){ # api only for KEGG msets
+    #   mSetObj$api$libname <- libname
+    #   mSetObj$api$excludeNum = excludeNum
+    #   return(.set.mSet(mSetObj));
+    # }
     
     if(!exists("current.msetlib") || "current.msetlib$lib.name"!=libname) {
       LoadKEGGLib("msets", libname);
